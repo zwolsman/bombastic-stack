@@ -66,13 +66,13 @@ export default class Game extends React.Component<GameProps, GameState> {
   private tileClick = (tileId: number) => {
     const moves = [...this.state.moves];
 
-    const { stake, bombs } = this.state;
+    const { stake, bombs, turnPlayerId } = this.state;
 
     const points =
-      bombs.indexOf(tileId) === -1 ? reward(moves.length, stake) : -1;
+      bombs.indexOf(tileId) === -1 ? reward(moves.length, stake) - stake : -1;
 
     moves.push({
-      playerId: this.state.turnPlayerId,
+      playerId: turnPlayerId,
       points,
       tileId
     });
@@ -82,7 +82,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         finished: points === -1,
         moves,
         stake: stake + points,
-        turnPlayerId: (this.state.turnPlayerId + 1) % 2
+        turnPlayerId: (turnPlayerId + 1) % 2
       },
       this.checkFinished
     );
